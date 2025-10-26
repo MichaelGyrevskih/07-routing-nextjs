@@ -59,3 +59,10 @@ export const fetchNoteById = async (id: string) => {
   const { data } = await api.get(`/notes/${id}`);
   return data as Note;
 };
+
+
+export const fetchNotesByTag = async ({ tag }: { tag?: string }) => {
+  const params = tag ? { tag } : {};
+  const { data } = await api.get("/notes", { params });
+  return data as FetchData;
+};

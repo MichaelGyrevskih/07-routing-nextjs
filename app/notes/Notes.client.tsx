@@ -10,20 +10,21 @@ import NoteForm from "@/components/NoteForm/NoteForm";
 
 interface NotesClientProps {
   initialData: Awaited<ReturnType<typeof fetchNotes>>;
+  tag?: string;
 }
 
-export default function NotesClient({ initialData }: NotesClientProps) {
+export default function NotesClient({ initialData, tag }: NotesClientProps) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const perPage = 6;
 
     useQuery({
-    queryKey: ["notes", { search, page, perPage }],
-    queryFn: () => fetchNotes({ search, page, perPage }),
-    initialData: page === 1 && search === "" ? initialData : undefined,
-    placeholderData: (prev) => prev,
-  });
+  queryKey: ["notes", { tag, page, perPage }],
+  queryFn: () => fetchNotes({ page, perPage, ...(tag ? { tag } : {}) }),
+  initialData: page === 1 ? initialData : undefined,
+  placeholderData: (prev) => prev,
+});
 
 
   return (
